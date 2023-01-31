@@ -13,10 +13,6 @@ class EmployeeTest {
     void theTestForTheConstruc(){
         assertEquals("StringId", as.getId());
         assertEquals(0,as.getSalary());
-//        String onePieceOfString= "String";
-//        int oneNumber = 0;
-//        Employee as = new Employee(onePieceOfString, oneNumber);
-//        assertEquals(as,);
     }
 
     @Test
