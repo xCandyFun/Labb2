@@ -1,43 +1,43 @@
 package com.example;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.internal.matchers.Null;
-
-import static org.mockito.ArgumentMatchers.anyDouble;
-import static org.mockito.ArgumentMatchers.anyString;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class EmployeesTest{
-    String stringTest = null;
-    double doubleTest = 0.0;
 
-    BankServiceImpl BS = new BankServiceImpl();
-    EmployeeRepositoryImpl ER = new EmployeeRepositoryImpl();
-
-    @Mock
-    BankService TT;
-    //EmployeeRepositoryImpl ERI = new EmployeeRepositoryImpl();
-    //@Mock
-    //EmployeeRepository ER; // = Mockito.mock(EmployeeRepository.class);
-
-    Employees ES = new Employees(ER,BS);
-    Employee EAT = new Employee(stringTest,doubleTest);
+class EmployeesTest {
+    EmployeeRepository employeeRepository;
+    BankService bankService;
+    Employee employee1, employee2, employee3;
+    Employees employees;
 
 
+    @BeforeEach
+    void setUp() {
+        employeeRepository = new EmployeeRepositoryImpl();
+        bankService = Mockito.mock(BankService.class);
+        employees = new Employees(employeeRepository, bankService);
 
-
+        employee1 = new Employee("1", 562);
+        employee2 = new Employee("2", 952);
+        employee3 = new Employee("3", 332);
+        employeeRepository.save(employee1);
+        employeeRepository.save(employee2);
+        employeeRepository.save(employee3);
+    }
 
     @Test
-    void payEmployees() {
-        assertNull(ER.findAll());
-     }
-     @Test
-    void Test(){
+    void IlikeMyReturnOf3() {
+        assertEquals(3, employees.payEmployees());
+    }
 
-     }
+    @Test
+    void IDontPayMyEmployeesIfExceptionIsThrown() {
+        Mockito.doThrow(new RuntimeException()).when(bankService).pay(employee1.getId(),employee1.getSalary());
+        employees.payEmployees();
+
+        assertFalse(employee1.isPaid());
+    }
 }
