@@ -15,10 +15,8 @@ class StringCalculatorTest {
     }
     @Test
     void mathIsEasy3Plus5Is8() {
-
         assertThat(stringCalculator.add("3,5")).isEqualTo(8);
     }
-
 
     @Test
     void worksWithfourNumbersAndGetTheCorrectSum() {
@@ -38,6 +36,7 @@ class StringCalculatorTest {
     @Test
     void usesDelimiterSpec(){
         assertThat(stringCalculator.add("//;\n1;2")).isEqualTo(3);
+        assertThat(stringCalculator.add("//.\n2.3.1")).isEqualTo(6);
     }
 
 
@@ -63,7 +62,16 @@ class StringCalculatorTest {
     void mapsNumberAbove1000ToLastTreeDigits(){
         assertThat(stringCalculator.add("1002")).isEqualTo(2);
     }
+    @Test
+    void acceptDelimiterOfArbitraryLength(){
+        assertThat(stringCalculator.add("//[***]\n1***2***3")).isEqualTo(6);
 
+}
+    @Test
+    void acceptsMultipleDelimiters(){
+        assertThat(stringCalculator.add("//[-][;]\n1-2;3")).isEqualTo(6);
+        assertThat(stringCalculator.add("//[--][...]\n2--3...4")).isEqualTo(9);
+    }
 
 
 }

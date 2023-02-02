@@ -1,16 +1,14 @@
 package com.example;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class StringCalculator {
-    private String delimiter;
-    private String numbers;
+    private final String delimiter;
+    private final String numbers;
 
     public StringCalculator(String delimiter, String numbers) {
         this.delimiter = delimiter;
@@ -51,11 +49,23 @@ public class StringCalculator {
     private static StringCalculator parseInput(String ManyNumbers) {
 
         if (ManyNumbers.startsWith("//")){
-            String[] parts = ManyNumbers.split("\n",2);
-            return new StringCalculator(parts[0].substring(2), parts[1]);
+            String[] headerAndNumberSequence = ManyNumbers.split("\n",2);
+            String delimiter = parseDelimiter(headerAndNumberSequence[0]);
+            return new StringCalculator(delimiter, headerAndNumberSequence[1]);
         }
         else {
             return new StringCalculator(",|\n", ManyNumbers);
         }
+    }
+
+    private static String parseDelimiter(String header) {
+        String delimiter = header.substring(2);
+        if (delimiter.startsWith("[")){
+
+            delimiter = delimiter.substring(1,delimiter.length()-1);
+        }
+        return Stream.of(delimiter.split("]\\["))
+                .map(Pattern::quote)
+                .collect(Collectors.joining("|"));
     }
 }
