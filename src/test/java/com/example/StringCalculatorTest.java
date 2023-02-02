@@ -73,5 +73,4 @@ class StringCalculatorTest {
         assertThat(stringCalculator.add("//[--][...]\n2--3...4")).isEqualTo(9);
     }
 
-
 }
