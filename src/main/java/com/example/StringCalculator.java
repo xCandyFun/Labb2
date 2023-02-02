@@ -4,6 +4,8 @@ package com.example;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class StringCalculator {
@@ -16,9 +18,28 @@ public class StringCalculator {
     }
 
     private  int sum() {
-        return Arrays.stream(numbers.split(delimiter))
-                .mapToInt(Integer::parseInt)
-                .sum();
+        ensureNoNegativeNumbers();
+        return getNumber().sum();
+    }
+
+    private void ensureNoNegativeNumbers() {
+        String negativeNumbersSequence = getNumber().filter(n ->n < 0)
+                .mapToObj(Integer::toString)
+                .collect(Collectors.joining(","));
+        if (!negativeNumbersSequence.isEmpty()){
+            throw new IllegalArgumentException("All numbers that are negative are not allowed: "
+                    +negativeNumbersSequence);
+        }
+    }
+
+    private IntStream getNumber() {
+        if (numbers.isEmpty()){
+            return IntStream.empty();
+        }else {
+            return Stream.of(numbers.split(delimiter))
+                    .mapToInt(Integer::parseInt)
+                    .map(n-> n % 1000);
+        }
     }
 
     public int add(String ManyNumbers) {

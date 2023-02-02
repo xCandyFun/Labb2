@@ -41,4 +41,29 @@ class StringCalculatorTest {
     }
 
 
+    @Test
+    void IfANegativeNumberIsPresentThrowAException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {stringCalculator.add("-3,-4");
+        });
+        String expected = "All numbers that are negative are not allowed: -3,-4";
+        String result = exception.getMessage();
+
+        assertThat(result).isEqualTo(expected);
+    }
+    @Test
+    void trowsOnNegativeNumbersWithAllNumbersInExceptionMessage() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {stringCalculator.add("1,-3,2,-4");});
+        String expected = "All numbers that are negative are not allowed: -3,-4";
+        String result = exception.getMessage();
+
+        assertThat(result).isEqualTo(expected);
+    }
+
+    @Test
+    void mapsNumberAbove1000ToLastTreeDigits(){
+        assertThat(stringCalculator.add("1002")).isEqualTo(2);
+    }
+
+
+
 }
